@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import Button from "./components/ButtonComponent/Button";
+import Homepage from "./pages/homepage";
+import WalletGenerator from "./pages/wallet-generator";
+import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
+import { M } from "./themes/container";
+import TokenManager from "./pages/token-manager";
+// import { ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Router>
+        {/* <Navigation
+        linkNames={[
+          { link: "About" },
+          { link: "pricing" },
+          { link: "Features" },
+          { link: "Contact" },
+        ]}
+      /> */}
+      <M>
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/wallet" element={<WalletGenerator />} />
+          <Route path="/manager" element={<TokenManager />} />
+        </Routes>
+        {/* <Footer/> */}
+        </M>
+      </Router>
   );
 }
-
 export default App;
