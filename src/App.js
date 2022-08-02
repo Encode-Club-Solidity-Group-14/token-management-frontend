@@ -7,6 +7,7 @@ import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import { M } from "./themes/container";
 import TokenManager from "./pages/token-manager";
+import TransactionHistory from "./pages/transaction-history";
 // import { ToastContainer } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 
@@ -14,19 +15,12 @@ import TokenManager from "./pages/token-manager";
 function App() {
   return (
       <Router>
-        {/* <Navigation
-        linkNames={[
-          { link: "About" },
-          { link: "pricing" },
-          { link: "Features" },
-          { link: "Contact" },
-        ]}
-      /> */}
       <M>
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/wallet" element={<WalletGenerator />} />
           <Route path="/manager" element={<TokenManager />} />
+          <Route path="/history" element={<TransactionHistory />} />
         </Routes>
         {/* <Footer/> */}
         </M>
