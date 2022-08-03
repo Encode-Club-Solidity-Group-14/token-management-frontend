@@ -26,7 +26,7 @@ const TransactionHistory = () => {
       </NavWrapper>
       <Summary />
       <ManagerMain>
-        <h3 className="bold color-primary">Transaction History</h3>
+        <h3 className="bold color-primary">Top Holders</h3>
         <CustomizedTables
           dataType="transaction-history"
           rows={transactionHistoryRows}

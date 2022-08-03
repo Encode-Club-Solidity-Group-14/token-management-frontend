@@ -12,6 +12,7 @@ export const M = styled.div`
   background-size: contain;
   /* background-attachment: fixed; */
   background-position: center bottom;
+  padding-bottom: 2rem;
 `;
 
 export const NavWrapper = styled.header`

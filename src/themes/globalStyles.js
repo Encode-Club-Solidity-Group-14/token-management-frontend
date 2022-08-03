@@ -135,9 +135,8 @@ line-height: 24px;
   .logo{
     display: flex;
     gap: 0.4rem;
-    width: 2rem;
     height: 38px;
-    color: #0038ff;
+    
     line-height: 38px;
     height: 100%;
 
@@ -149,6 +148,7 @@ line-height: 24px;
     .logo-name{
         font-size: 25px;
         font-weight: 700;
+        color: #0038ff;
     }
   }
   .center {
