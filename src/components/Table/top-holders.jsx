@@ -29,9 +29,9 @@ const TopHolders = ({rows}) => {
       <StyledTableCell component="th" scope="row">
         {address}
       </StyledTableCell>
-      <StyledTableCell align="right">{quantity}</StyledTableCell>
-      <StyledTableCell align="right">{percentage}</StyledTableCell>
-      <StyledTableCell align="right">{usdValue}</StyledTableCell>
+      <StyledTableCell align="center">{quantity}</StyledTableCell>
+      <StyledTableCell align="center">{percentage}</StyledTableCell>
+      <StyledTableCell align="center">{usdValue}</StyledTableCell>
     </StyledTableRow>
   );
 };

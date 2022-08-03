@@ -10,8 +10,8 @@ const Navigation = ({ linkNames }) => {
         {linkNames?.map((linkName, index) => (
           <li>
             <NavBtnLink
-              className={({ isActive }) => isActive && bold}
-              to={"/manager"}
+              className={({ isActive }) => isActive && "bold"}
+              to={link.to}
             >
               {linkName.link}
             </NavBtnLink>
