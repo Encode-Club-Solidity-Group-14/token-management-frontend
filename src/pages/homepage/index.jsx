@@ -13,10 +13,10 @@ const Homepage = () => {
       <MainContainer>
         <Navigation
           linkNames={[
-            { link: "About" },
-            { link: "pricing" },
-            { link: "Features" },
-            { link: "Contact" },
+            { link: "About", to: "/about" },
+            { link: "Pricing", to: "/pricing" },
+            { link: "Features", to: "/features" },
+            { link: "Contact", to: "contact" },
           ]}
         />
       </MainContainer>

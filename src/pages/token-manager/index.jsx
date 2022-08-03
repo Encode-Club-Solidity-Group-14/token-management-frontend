@@ -11,10 +11,10 @@ const TokenManager = () => {
       <NavWrapper>
         <Navigation
           linkNames={[
-            { link: "Token Manager" },
-            { link: "Transaction History" },
-            { link: "Holders" },
-            { link: "Analytics" },
+            { link: "Token Manager", to: "/token-manager" },
+            { link: "Transaction History", to: "/ransaction-history" },
+            { link: "Holders", to: "/top-holders" },
+            { link: "Analytics", to: "#" },
           ]}
         />
         <Button label={"Connect Wallet"} classnames={["secondary-btn"]} />

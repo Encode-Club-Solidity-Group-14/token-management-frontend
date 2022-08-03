@@ -11,7 +11,7 @@ const Navigation = ({ linkNames }) => {
           <li>
             <NavBtnLink
               className={({ isActive }) => isActive && "bold"}
-              to={link.to}
+              to={"#"}
             >
               {linkName.link}
             </NavBtnLink>

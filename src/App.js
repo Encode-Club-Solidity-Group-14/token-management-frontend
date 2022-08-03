@@ -20,9 +20,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/wallet" element={<WalletGenerator />} />
-          <Route path="/manager" element={<TokenManager />} />
+          <Route path="/token-manager" element={<TokenManager />} />
           <Route path="/transaction-history" element={<TransactionHistory />} />
-          <Route path="/holders-history" element={<TopHoldersHistory />} />
+          <Route path="/top-holders" element={<TopHoldersHistory />} />
         </Routes>
         {/* <Footer/> */}
         </M>
