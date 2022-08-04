@@ -1,8 +1,7 @@
 import Button from "../../components/ButtonComponent/Button";
 import InputComponent from "../../components/Input";
 import Navigation from "../../components/Navigation";
-import ProfileSummary from "../../components/Profile-Summary";
-import TokenOverview from "../../components/Token-overview";
+import Summary from "../../components/tokenOverview-profileSummary";
 import { MainContainer, NavWrapper } from "../../themes/container";
 import { ManagerMain, TokenManagerForm, OverviewSection } from "./styles";
 
@@ -12,30 +11,15 @@ const TokenManager = () => {
       <NavWrapper>
         <Navigation
           linkNames={[
-            { link: "Token Manager" },
-            { link: "Transaction History" },
-            { link: "Holders" },
-            { link: "Analytics" },
+            { link: "Token Manager", to: "/token-manager" },
+            { link: "Transaction History", to: "/ransaction-history" },
+            { link: "Holders", to: "/top-holders" },
+            { link: "Analytics", to: "#" },
           ]}
         />
         <Button label={"Connect Wallet"} classnames={["secondary-btn"]} />
       </NavWrapper>
-      <OverviewSection>
-        <TokenOverview
-          price={`$200`}
-          marketCap={`$ 3000M`}
-          totalSupply={`200K`}
-          title="Token Overview"
-          holders={`$300,000M`}
-        />
-        <ProfileSummary
-          contract={"Address"}
-          title="Profile Pummary"
-          website={"EncodeTeam4@BossLevelShii.com"}
-          socialProfiles="peace out"
-          support={"Trixie"}
-        />
-      </OverviewSection>
+      <Summary />
       <ManagerMain>
         <h3 className="bold color-primary">Token Manager</h3>
         <TokenManagerForm>

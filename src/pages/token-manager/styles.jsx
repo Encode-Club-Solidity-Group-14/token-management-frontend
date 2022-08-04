@@ -19,13 +19,14 @@ export const ManagerMain = styled.main`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
 `;
 
 export const TokenManagerForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  padding-bottom: 2rem;
 
   .snapshot-pause-btn{
     display: flex;
