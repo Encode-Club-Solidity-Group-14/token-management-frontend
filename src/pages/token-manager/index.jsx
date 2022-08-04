@@ -10,12 +10,12 @@ const TokenManager = () => {
     <MainContainer>
       <NavWrapper>
         <Navigation
-          linkNames={[
-            { link: "Token Manager", to: "/token-manager" },
-            { link: "Transaction History", to: "/ransaction-history" },
-            { link: "Holders", to: "/top-holders" },
-            { link: "Analytics", to: "#" },
-          ]}
+            linkNames={[
+              { link: "Token Manager", to: "/token-manager" },
+              { link: "Transaction History", to: "/transaction-history" },
+              { link: "Holders", to: "/top-holders" },
+              { link: "Analytics", to: "#" },
+            ]}
         />
         <Button label={"Connect Wallet"} classnames={["secondary-btn"]} />
       </NavWrapper>

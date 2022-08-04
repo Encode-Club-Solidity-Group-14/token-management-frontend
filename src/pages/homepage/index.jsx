@@ -5,6 +5,7 @@ import { HomepageWrapper } from "./styles";
 import Button from "../../components/ButtonComponent/Button";
 import Footer from "../../components/Footer";
 import { MainContainer } from "../../themes/container";
+import {Link} from "react-router-dom"
 
 const Homepage = () => {
   return (
@@ -13,15 +14,17 @@ const Homepage = () => {
       <MainContainer>
         <Navigation
           linkNames={[
-            { link: "About", to: "/about" },
-            { link: "Pricing", to: "/pricing" },
-            { link: "Features", to: "/features" },
-            { link: "Contact", to: "contact" },
+            { link: "About", to: "#" },
+            { link: "Pricing", to: "#" },
+            { link: "Features", to: "#" },
+            { link: "Contact", to: "/#" },
           ]}
         />
       </MainContainer>
       <div className="center">
-        <Button classnames={["connect-btn"]} label={"Connect Wallet"} />
+        <Link to="/wallet">
+          <Button classnames={["connect-btn"]} label={"Connect Wallet"} />
+        </Link>
       </div>
       {/* </HomepageWrapper> */}
     </>
