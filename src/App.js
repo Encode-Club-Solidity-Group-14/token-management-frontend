@@ -9,24 +9,52 @@ import { M } from "./themes/container";
 import TokenManager from "./pages/token-manager";
 import TransactionHistory from "./pages/transaction-history";
 import TopHoldersHistory from "./pages/holders-history";
+import { ProtectedRoute } from "./ProtectedRoutes";
 // import { ToastContainer } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 
-
 function App() {
   return (
-      <Router>
+    <Router>
       <M>
         <Routes>
           <Route path="/" element={<Homepage />} />
-          <Route path="/wallet" element={<WalletGenerator />} />
-          <Route path="/token-manager" element={<TokenManager />} />
-          <Route path="/transaction-history" element={<TransactionHistory />} />
-          <Route path="/top-holders" element={<TopHoldersHistory />} />
+          <Route
+            path="/wallet"
+            element={
+              <ProtectedRoute>
+                <WalletGenerator />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/token-manager"
+            element={
+              <ProtectedRoute>
+                <TokenManager />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/transaction-history"
+            element={
+              <ProtectedRoute>
+                <TransactionHistory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/top-holders"
+            element={
+              <ProtectedRoute>
+                <TopHoldersHistory />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
         {/* <Footer/> */}
-        </M>
-      </Router>
+      </M>
+    </Router>
   );
 }
 export default App;

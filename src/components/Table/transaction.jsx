@@ -22,7 +22,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const TransactionHistory = ({row}) => {
-    console.log(row)
   const { from, to, quantity, time, method, txHash } = row;
   return (
     <StyledTableRow key={from}>
