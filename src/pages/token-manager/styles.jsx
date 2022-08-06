@@ -8,7 +8,7 @@ gap: 2rem;
 p{
     overflow-wrap:break-word;
 }
-@media screen  and (min-width: 40rem){  
+@media screen  and (min-width: 40rem){
     display: grid;
     grid-template-columns: 1fr 1fr;
     padding: 2.5rem 0;
@@ -20,6 +20,7 @@ export const ManagerMain = styled.main`
   flex-direction: column;
   gap: 2rem;
   margin-top: 1rem;
+  margin-bottom: 10rem;
 `;
 
 export const TokenManagerForm = styled.form`

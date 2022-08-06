@@ -10,7 +10,9 @@ const Navigation = ({ linkNames }) => {
         {linkNames?.map((linkName, index) => (
           <li>
             <NavBtnLink
-              className={({ isActive }) => isActive && "bold"}
+              exact
+              className={({ isActive }) => isActive && console.log(isActive)}
+              activeClassName={{Style: {fontWeight: '700'}}}
               to={`${linkName.to}`}
             >
               {linkName.link}

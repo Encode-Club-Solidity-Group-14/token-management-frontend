@@ -9,7 +9,7 @@ const WalletGenerator = () => {
   return (
     <>
       <MainContainer>
-        <Navigation />
+        {/* <Navigation /> */}
         <p className={"color-primary bold"}>ERC 20 Token Generator</p>
         <Main>
           <FormWrapper>

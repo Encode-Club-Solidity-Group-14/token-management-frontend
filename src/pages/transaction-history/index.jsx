@@ -13,7 +13,7 @@ import { ManagerMain } from "../token-manager/styles";
 const TransactionHistory = () => {
   return (
     <MainContainer>
-      <NavWrapper>
+      {/* <NavWrapper>
         <Navigation
           linkNames={[
             { link: "Token Manager", to: "/token-manager" },
@@ -23,7 +23,7 @@ const TransactionHistory = () => {
           ]}
         />
         <Button label={"Connect Wallet"} classnames={["secondary-btn"]} />
-      </NavWrapper>
+      </NavWrapper> */}
       <Summary />
       <ManagerMain>
         <h3 className="bold color-primary">Transaction History</h3>

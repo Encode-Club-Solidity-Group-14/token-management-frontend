@@ -17,6 +17,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#0038ff",
     color: theme.palette.common.white,
+    fontWeight: 700,
+    fontSize: 15,
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -61,7 +63,7 @@ export default function CustomizedTables({ dataType, rows, tableHeaders }) {
           ).map((row) =>
             dataType === "transaction-history" ? (
               <TransactionHistory row={row} />
-            ) : (
+              ) : (
               <TopHolders row={row} />
             )
           )}
