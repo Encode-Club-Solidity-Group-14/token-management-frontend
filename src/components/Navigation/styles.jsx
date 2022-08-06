@@ -27,7 +27,7 @@ font-family: 'Poppins';
 export const NavBtnLink = styled(Link)`
   line-height: 24px;
   font-weight: 400;
-  font-size: 1.3rem;
+  font-size: 16px;
   width: 100%;
   color: #1e1e1e;
   /* padding: 0 10px; */
