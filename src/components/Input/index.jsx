@@ -7,6 +7,7 @@ const InputComponent = ({
   labelName,
   placeholder,
   tokenManager,
+  onChange
 }) => {
   return tokenManager ? (
     <InputWrapper tokenManager>
@@ -16,6 +17,7 @@ const InputComponent = ({
         name={label}
         value={value}
         placeholder={placeholder}
+        onChange={onChange}
       />
     </InputWrapper>
   ) : (
@@ -27,6 +29,7 @@ const InputComponent = ({
         name={label}
         value={value}
         placeholder={placeholder}
+        onChange={onChange}
       />
     </InputWrapper>
   );

@@ -124,6 +124,15 @@ line-height: 24px;
     /* max-width: 218.51px; */
   }
 
+  .selected-btn {
+    background: #3f4e85;
+  }
+
+  .disabled-btn {
+    background: #5b5d60;
+    color: #979292;
+  }
+
   .submit-btn {
     height: 56px;
     background-color: #222222;
