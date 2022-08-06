@@ -31,6 +31,12 @@ export const NavBtnLink = styled(Link)`
   width: 100%;
   color: #1e1e1e;
   /* padding: 0 10px; */
+  &:active {
+    font-weight: 700 !important;
+  }
+  &:hover {
+    font-weight: 700 !important;
+  }
 `;
 
 export const NavLogoLink = styled(NavBtnLink)`

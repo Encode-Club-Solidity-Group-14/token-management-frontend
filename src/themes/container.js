@@ -2,7 +2,7 @@ import styled from "styled-components";
 import bg from "../assets/footer.svg";
 
 export const MainContainer = styled.div`
-  margin: 0 60px;
+  margin: 0 60px 10px;
   /* min-height: 80vh; */
 `;
 export const M = styled.div`

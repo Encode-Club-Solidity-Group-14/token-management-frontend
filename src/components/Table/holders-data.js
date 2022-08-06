@@ -1,5 +1,5 @@
-function createData(from, to, quantity, time, method, txHash) {
-  return { from, to, quantity, time, method, txHash };
+function createData(address, quantity, percentage, usdValue) {
+  return { address, quantity, percentage, usdValue };
 }
 
 export const holdersRows = [

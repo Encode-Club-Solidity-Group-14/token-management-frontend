@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import {BrowserRouter as Router} from 'react-router-dom';
 import App from "./App";
 import reportWebVitals from './reportWebVitals';
 import GlobalStyle from './themes/globalStyles'
@@ -121,7 +122,9 @@ ReactDOM.render(
     {/* <Provider store={store}> */}
     {/* <ThemeProvider theme={Theme}> */}
     <GlobalStyle />
-    <App />
+    <Router>
+        <App />
+    </Router>
     {/* </ThemeProvider> */}
     {/* </Provider> */}
   </React.StrictMode>,rootElement

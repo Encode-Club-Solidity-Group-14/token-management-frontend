@@ -11,16 +11,6 @@ const Homepage = () => {
   return (
     // <HomepageWrapper>
     <>
-      <MainContainer>
-        <Navigation
-          linkNames={[
-            { link: "About", to: "#" },
-            { link: "Pricing", to: "#" },
-            { link: "Features", to: "#" },
-            { link: "Contact", to: "/#" },
-          ]}
-        />
-      </MainContainer>
       <div className="center">
         <Link to="/wallet">
           <Button classnames={["connect-btn"]} label={"Connect Wallet"} />
