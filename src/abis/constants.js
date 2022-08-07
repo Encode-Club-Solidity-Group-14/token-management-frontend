@@ -1,8 +1,23 @@
-import TokenFactory from './TokenFactory.json'
-import ERC20 from './ERC20.json'
+import TokenFactory from "./TokenFactory.json"
+import ERC20 from "./ERC20.json"
 
 export const tokenFactoryABI = TokenFactory.abi;
 export const ERC20_ABI = ERC20.abi;
-export const tokenFactoryAddress = '0x5E0f0240dE7Ff0d80a3eead4c1350C2a2Ba07fDe';
-export const ERC20_ADDRESS = '0xdD6bA18f33731147d759Fa2043d15E87c6e8F178';
-export const DAI_ROPSTEN_ADDRES = '0xaD6D458402F60fD3Bd25163575031ACDce07538D';
+export const tokenFactoryAddress = "0x5E0f0240dE7Ff0d80a3eead4c1350C2a2Ba07fDe";
+export const ERC20_ADDRESS = "0xdD6bA18f33731147d759Fa2043d15E87c6e8F178";
+export const ERC20_MINT = "0xE531ebc66C6633c3332be20392a86e052fC76D97" ;
+export const ERC20_BURN = "0x9c966Ae80A0e668A94C3322f705E5bceC8837BfC";
+export const ERC20_MINT_BURN = "0x5cFB7Fa8028b0e6f20Fe1030bAc455cFaB812Ce7";
+export const ERC20_AIRDROP = "0x22c164521c5Da5C0E9140a6062a08599d537fdc4";
+export const ERC20_OWNABLE = "0xeFaeF47F8b52Da7642EccDB2C18B51aeB7760C7F";
+export const ERC20_PAUSABLE = "0xd7Df141DFFf92FCd06862cB2aA61a19f87e9AD34";
+export const ERC20_MINT_PAUSABLE = "0x8e59Bafaf96727cefd0071B5159e02fa65EaE956";
+export const ERC20_BURN_PAUSABLE = "0xf494bB96444ff6BA242C49a95261F9668Ce50eB5";
+export const ERC20_MINT_BURN_PAUSABLE = "0x66365F342a50FDBFaa6894415B1Ab36d859CD0C7";
+export const ERC20_FLASH_MINT = "0x75857966D19a078590BdC09C3AD376d67DDc5b64";
+export const ERC20_SNAPSHOTS = "0xe549aE4D5783799D007AF13BF7665870E32CAf87";
+
+//TO CREATE
+export const ERC20_MINT_VOTE = "";
+export const ERC20_MINT_VOTE_BURN = "";
+export const ERC20_MINT_VOTE_BURN_PAUSE = "";

@@ -1,5 +1,5 @@
 import React from 'react'
-import LogoImg from "../../assets/logo.svg"
+import LogoImg from "../../assets/trixie_logo.jpg"
 import {NavLogoLink } from '../Navigation/styles'
 
 const Logo = () => {

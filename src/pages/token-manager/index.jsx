@@ -30,14 +30,21 @@ const TokenManager = () => {
 
   useEffect(() => {
     if (user) {
-      const listTokens = user.attributes.tokens?.attributes?.ERC20
-      console.log(listTokens)
-      setUserTokenList(listTokens)
-      const token = listTokens[0]
-      console.log(listTokens)
-      if (token) {
-        setTokenAddress(token)
-      }
+      let listTokens = [];
+      Moralis.Cloud.run("getERC20Tokens", {userAddress: user.attributes.ethAddress}).then((data)=> {
+        if(data){
+          data.map((token) => {
+            listTokens.push(token.attributes.address);
+            if(listTokens.length > 0){
+              setUserTokenList(listTokens)
+              const token = listTokens[0];
+              setTokenAddress(token)
+            }
+         })
+        }
+      }).catch((error) => {
+          console.error(error);
+      })
     }
   }, [user])
 
