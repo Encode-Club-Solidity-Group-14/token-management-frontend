@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { ERC20_ABI } from "../../abis/constants"
 import { Contract, ethers } from "ethers";
+import Scripts from "../../components/TokenManagerScripts";
 
 const TokenManager = () => {
   const {
@@ -78,6 +79,7 @@ const TokenManager = () => {
       <Summary />
       <ManagerMain>
         <h3 className="bold color-primary">Token Manager - {tokenAddress}</h3>
+        <Scripts />
         <TokenManagerForm>
           <InputComponent
             tokenManager={"tokenManager"}
