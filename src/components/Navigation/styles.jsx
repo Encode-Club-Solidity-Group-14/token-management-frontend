@@ -41,7 +41,7 @@ export const NavBtnLink = styled(Link)`
 
 export const NavLogoLink = styled(NavBtnLink)`
 display: flex;
-gap: 0.3rem;
+gap: 0.5rem;
 align-items: center;
 justify-content: center;
 `

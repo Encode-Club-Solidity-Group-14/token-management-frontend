@@ -126,6 +126,7 @@ line-height: 24px;
 
   .selected-btn {
     background: #3f4e85;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 100%);
   }
 
   .disabled-btn {
@@ -150,8 +151,8 @@ line-height: 24px;
     height: 100%;
 
     .logo-img{
-        width: 25.38px;
-        height: 22.38px;
+        width: 35.38px;
+        height: 40.38px;
         font-weight: 700;
     }
     .logo-name{
