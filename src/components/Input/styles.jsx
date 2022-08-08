@@ -8,10 +8,10 @@ export const InputWrapper = styled.div`
     border-radius: 5px;
     border: 1px solid #e2e1e5;
     padding: 10px 15px;
-    font-size: ${props=> props.tokenManager ? " 12px": " 14px"};
+    font-size: 14px;
 
     ::placeholder {
-      color:${props=> props.tokenManager ? " #6b6a6a": " #e2e1e5"};
+      color: #e2e1e5;
     }
     :focus{
       outline: none;

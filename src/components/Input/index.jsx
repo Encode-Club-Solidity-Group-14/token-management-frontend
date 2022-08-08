@@ -7,6 +7,7 @@ const InputComponent = ({
   labelName,
   placeholder,
   tokenManager,
+  toolTip,
   onChange
 }) => {
   return tokenManager ? (
@@ -22,7 +23,7 @@ const InputComponent = ({
     </InputWrapper>
   ) : (
     <InputWrapper>
-      <label htmlFor={label}>{labelName}</label>
+      <label data-tip data-for={toolTip} htmlFor={label}>{labelName}</label>
       <input
         type={type}
         id={label}

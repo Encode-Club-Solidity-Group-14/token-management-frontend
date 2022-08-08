@@ -1,5 +1,5 @@
 import InputComponent from "../../components/Input";
-import Navigation from "../../components/Navigation";
+import logo from "../../assets/alien-going-to-space-emoji-animation.gif"
 import { FormWrapper, Main, ButtonGroups } from "./styles";
 import { MainContainer } from "../../themes/container";
 import Button from "../../components/ButtonComponent/Button";
@@ -185,7 +185,8 @@ const TokenGenerator = (props) => {
         totalSupply_: tokenDetails.supply,
       },
     }
-    const transaction = await Moralis.executeFunction(sendOptions).catch(
+    const transaction = await Moralis.executeFunction(sendOptions)
+    .catch(
       (error) => {
         console.error(error)
         setIsLoading(false)
@@ -193,12 +194,18 @@ const TokenGenerator = (props) => {
     )
     console.log(`Transaction Hash: ${transaction.hash}`)
     const result = await transaction.wait()
-    const data = result.events[0].args.newTokenAddress
+    console.log(result);
+    let data = result.events[0].args.newTokenAddress
+    if(data === undefined){
+      data = result.events[1].args.newTokenAddress
+    }
     console.log(`ERC20 cloned! address at ${data}`)
     if (data) {
       const ERC20 = Moralis.Object.extend("ERC20")
       const token = new ERC20()
       token.set("userAddress", user.attributes.ethAddress)
+      token.set("name", tokenDetails.name)
+      token.set("symbol", tokenDetails.symbol)
       token.set("address", data)
       token.set("type", "ERC20")
       token.save()
@@ -220,7 +227,7 @@ const TokenGenerator = (props) => {
   return (
     <>
       {isLoading ? (
-        <LoadingSpinner />
+        <LoadingSpinner logo={logo}/>
       ) : (
         <MainContainer>
           {/* <Navigation /> */}
@@ -348,6 +355,7 @@ const TokenGenerator = (props) => {
                   `${tokenCharacteristc.ERC20Ownable && "selected-btn"}`,
                 ]}
                 onClick={() => onTokenCharacteristcsHandler("ERC20Ownable")}
+                toolTip="ERC20Ownable"
                 label={"Ownables"}
               />
               <ReactTooltip id="ERC20Ownable" place="top" effect="solid">

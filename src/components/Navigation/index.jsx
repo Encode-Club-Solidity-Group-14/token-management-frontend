@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../Logo.js/index.jsx";
+import Logo from "../Logo/index.jsx";
 import { NavigationWrapper, NavBtnLink } from "./styles";
 
 const Navigation = ({ linkNames }) => {

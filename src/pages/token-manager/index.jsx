@@ -1,17 +1,12 @@
-import Button from "../../components/ButtonComponent/Button";
-import InputComponent from "../../components/Input";
-import Navigation from "../../components/Navigation";
 import Summary from "../../components/tokenOverview-profileSummary";
-import { MainContainer, NavWrapper } from "../../themes/container";
-import { ManagerMain, TokenManagerForm, OverviewSection } from "./styles";
+import { MainContainer } from "../../themes/container";
+import { ManagerMain } from "./styles";
 import { useMoralis } from "react-moralis"
-import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { ERC20_ABI } from "../../abis/constants"
-import { Contract, ethers } from "ethers";
-import Scripts from "../../components/TokenManagerScripts";
+import Select from 'react-select'
+import TokenManagerScripts from "../../components/TokenManagerScripts";
 
-const TokenManager = () => {
+const TokenManager = (props) => {
   const {
     authenticate,
     isAuthenticated,
@@ -23,11 +18,14 @@ const TokenManager = () => {
     provider,
   } = useMoralis()
 
+  useEffect(() => {
+    props.loadUserAddress()
+    setUserAddress(user?.get("ethAddress"));
+  }, [user])
+  
+  const [userAddress, setUserAddress] = useState("")
   const [tokenAddress, setTokenAddress] = useState("")
   const [userTokenList, setUserTokenList] = useState([])
-  const [event, setEvent] = useState({
-    transferAmount: 0
-  })
 
   useEffect(() => {
     if (user) {
@@ -35,11 +33,9 @@ const TokenManager = () => {
       Moralis.Cloud.run("getERC20Tokens", {userAddress: user.attributes.ethAddress}).then((data)=> {
         if(data){
           data.map((token) => {
-            listTokens.push(token.attributes.address);
+            listTokens.push({value: token.attributes.address, label: token.attributes.name});
             if(listTokens.length > 0){
               setUserTokenList(listTokens)
-              const token = listTokens[0];
-              setTokenAddress(token)
             }
          })
         }
@@ -49,92 +45,18 @@ const TokenManager = () => {
     }
   }, [user])
 
-  const submit = async () => {
-    await Moralis.enableWeb3();
-    console.log(event.transferAmount)
-    let provider
-    if (typeof window.ethereum !== "undefined") {
-      console.log("MetaMask is installed!")
-      provider = new ethers.providers.Web3Provider(Moralis.provider)
-    }
-
-    const sendOptions = {
-      contractAddress: tokenAddress,
-      functionName: "transfer",
-      abi: ERC20_ABI,
-      params: {
-        from: user?.get("ethAddress"),
-        to: "0x531d57798205714B688cCEA0b5D99427c1B184F1",
-        amount: event.transferAmount
-      },
-    }
-
-    const transaction = await Moralis.executeFunction(sendOptions);
-    console.log(`Transaction Hash: ${transaction.hash}`)
-    const result = await transaction.wait();
-    alert('Transfer Done');
-
-  }
-
-  const onChangeHandler = (e) => {
-    const { name, value } = e.target
-    setEvent({ ...event, [name]: value })
+  const selected = (e) => {
+    console.log(e.value)
+    setTokenAddress(e.value)
   }
 
   return (
-    <MainContainer>
+      <MainContainer>
       <Summary />
       <ManagerMain>
         <h3 className="bold color-primary">Token Manager - {tokenAddress}</h3>
-        <Scripts />
-        <TokenManagerForm>
-          <InputComponent
-            tokenManager={"tokenManager"}
-            type="text"
-            label="transferAmount"
-            value={event.transferAmount}
-            onChange={onChangeHandler}
-            placeholder="Transfer token to address"
-          />
-          <Button
-            label={"Transfer"}
-            onClick={submit}
-            classnames={[" secondary-btn snapshot"]}
-          />
-          <InputComponent
-            tokenManager={"tokenManager"}
-            type="text"
-            label="query-balance"
-            value={""}
-            placeholder="Query holder balance by address"
-          />
-          <InputComponent
-            tokenManager={"tokenManager"}
-            type="text"
-            label="increase-supply"
-            value={""}
-            placeholder="Increase Supply"
-          />
-          <InputComponent
-            tokenManager={"tokenManager"}
-            type="text"
-            label="decrease-supply"
-            value={""}
-            placeholder="Decrease Supply"
-          />
-          <div className="snapshot-pause-btn">
-            <Button
-              label={"Take Snapshot"}
-              classnames={[" secondary-btn snapshot"]}
-            />
-            <Button
-              label={" Emergency Pause"}
-              classnames={[" secondary-btn emergency"]}
-            />
-          </div>
-          <label>All user tokens:</label>
-          {userTokenList.map((address) => <span> {address} </span>)}
-        </TokenManagerForm>
+        <Select options={userTokenList} onChange={selected}/>
+        <TokenManagerScripts tokenAddress={tokenAddress}/>
       </ManagerMain>
     </MainContainer>
   );

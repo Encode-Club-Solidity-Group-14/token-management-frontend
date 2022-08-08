@@ -1,136 +1,387 @@
-import { useState } from "react";
-import './styles.css'
+import { TokenManagerForm, ButtonGroups } from './styles'
+import logo from "../../assets/alien-reading-book-animation.gif"
+import LoadingSpinner from "../../components/LoadingSpinner/index";
+import InputComponent from '../../components/Input'
+import Button from '../../components/ButtonComponent/Button'
+import ReactTooltip from 'react-tooltip'
+import { ERC20_ABI, ERC20_MINT_ABI } from "../../abis/constants"
+import { useMoralis } from "react-moralis";
+import { useState } from 'react'
 
-const Scripts = () => {
-    const [balanceOf, setBalanceOf] = useState('');
-    const [transferRecipientAddress, setTransferRecipientAddress] = useState('');
-    const [transferAmount, setTransferAmount] = useState('');
-    const [transferFromSenderAddress, setTransferFromSenderAddress] = useState('');
-    const [transferFromRecipientAddress, setTransferFromRecipientAddress] = useState('');
-    const [transferFromAmount, setTransferFromAmount] = useState('');
-    const [airdropAmount, setAirdropAmount] = useState('');
-    const [mintableAmount, setMintableAmount] = useState('');
-    const [allowanceOwnerAddress, setAllowanceOwnerAddress] = useState('');
-    const [allowanceSpenderAddress, setAllowanceSpenderAddress] = useState('');
-    const [approveSpenderAddress, setApproveSpenderAddress] = useState('');
-    const [approveAmount, setApproveAmount] = useState('');
+const TokenManagerScripts = (props) => {
+  const {
+    authenticate,
+    isAuthenticated,
+    isAuthenticating,
+    user,
+    account,
+    logout,
+    Moralis,
+    provider,
+  } = useMoralis()
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  // BalanceOf properties
+  const [balanceOf, setBalanceOf] = useState({
+    address: "",
+    amount: ""
+  })
+  // Mint properties
+  const [mint, setMint] = useState({
+    recipientAddress: "",
+    amount: ""
+  })
+  const [mintableAmount, setMintableAmount] = useState('')
+  // Transfer properties
+  const [transfer, setTransfer] = useState({
+    recipientAddress: "",
+    amount: ""
+  })
+  // Allowance Properties
+  const [allowance, setAllowance] = useState({
+    ownerAddress: "",
+    spenderAddress: ""
+  })
+  // TransferFrom properties
+  const [transferFrom, setTransferFrom] = useState({
+    senderAddress: "",
+    recipientAddress: "",
+    amount: ""
+  })
+  // Approve properties
+  const [approve, setApprove] = useState({
+    spenderAddress: "",
+    amount: ""
+  })
+  // Airdrop properties
+  const [airdropAmount, setAirdropAmount] = useState('')
+
+  const onTransferFromChangeHandler = (e) => {
+    const { name, value } = e.target
+    setTransferFrom({ ...transferFrom, [name]: value })
+  }
+
+  const onTransferChangeHandler = (e) => {
+    const { name, value } = e.target
+    setTransfer({ ...transfer, [name]: value })
+  }
+
+  const onApproveChangeHandler = (e) => {
+    const { name, value } = e.target
+    setApprove({ ...approve, [name]: value })
+  }
+
+  const onAllowanceChangeHandler = (e) => {
+    const { name, value } = e.target
+    setAllowance({ ...allowance, [name]: value })
+  }
+
+  const onBalanceChangeHandler = (e) => {
+    const { name, value } = e.target
+    setBalanceOf({ ...balanceOf, [name]: value })
+  }
+
+  const onMintChangeHandler = (e) => {
+    const { name, value } = e.target
+    setMint({ ...mint, [name]: value })
+  }
+
+  const submit = async () => {}
+
+  const sendBalanceOf = async () => {
+    setBalanceOf({ ...balanceOf, ["amount"]: "" })
+    await Moralis.enableWeb3();
+    const sendOptions = {
+      contractAddress: props.tokenAddress,
+      functionName: "balanceOf",
+      abi: ERC20_ABI,
+      params: {
+        account: balanceOf.address
+      },
+    }
+    const balance = await Moralis.executeFunction(sendOptions);
+    console.log(balance)
+    setBalanceOf({ ...balanceOf, ["amount"]: balance })
+  }
+  
+  const sendMint = async () => {
+    setIsLoading(true)
+    await Moralis.enableWeb3();
+    const sendOptions = {
+      contractAddress: props.tokenAddress,
+      functionName: "mint",
+      abi: ERC20_MINT_ABI,
+      params: {
+        from: user?.get("ethAddress"),
+        to: mint.recipientAddress,
+        amount: mint.amount
+      },
+    }
+    const transaction = await Moralis.executeFunction(sendOptions)
+    .catch(
+      (error) => {
+        console.error(error)
+        setIsLoading(false)
+      },
+    );
+    console.log(`Transaction Hash: ${transaction.hash}`)
+    const result = await transaction.wait();
+    console.log(result)
+    setIsLoading(false)
+  }
+
+
+  const sendTransfer = async () => {
+    setIsLoading(true)
+    console.log(transfer)
+    await Moralis.enableWeb3();
+    const sendOptions = {
+      contractAddress: props.tokenAddress,
+      functionName: "transfer",
+      abi: ERC20_ABI,
+      params: {
+        from: user?.get("ethAddress"),
+        to: transfer.recipientAddress,
+        amount: transfer.amount
+      },
+    }
+    const transaction = await Moralis.executeFunction(sendOptions)
+    .catch(
+      (error) => {
+        console.error(error)
+        setIsLoading(false)
+      },
+    )
+    console.log(`Transaction Hash: ${transaction.hash}`)
+    const result = await transaction.wait();
+    console.log(result)
+    setIsLoading(false)
+  }
 
   return (
-    <div className="create">
-        <div className="title">BalanceOf</div>
-        <div className="description">Returns the account balance of another account address.</div>
-        <input 
-          type="text" 
-          placeholder="Owner Address"
-          required 
-          value={balanceOf}
-          onChange={(e) => setBalanceOf(e.target.value)}
+    <>
+    {isLoading ? (
+      <LoadingSpinner logo={logo}/>
+    ) : (
+    <TokenManagerForm>
+      {/* row #1 */}
+      <div className="row">
+        <div className="column">
+          <InputComponent
+            type="text"
+            label="address"
+            labelName="BalanceOf"
+            value={balanceOf.address}
+            toolTip="BalanceOf"
+            onChange={onBalanceChangeHandler}
+            placeholder="Owner Address"
+          />
+          <ReactTooltip id="BalanceOf" place="top" effect="solid">
+            Returns the account balance of another account address.
+          </ReactTooltip>
+          <Button
+            label={'Query Balance'}
+            onClick={sendBalanceOf}
+            classnames={[' secondary-btn snapshot']}
+          />
+        {balanceOf.amount !== "" && `Balance: ${balanceOf.amount}`}
+        </div>
+        <div className="column">
+          <InputComponent
+            type="text"
+            label="recipientAddress"
+            labelName="Mintable"
+            toolTip="Mintable"
+            value={mint.recipientAddress}
+            onChange={onMintChangeHandler}
+            placeholder="Recipient Address"
+          />
+          <InputComponent
+            tokenManager={'tokenManager'}
+            type="number"
+            label="amount"
+            value={mint.amount}
+            onChange={onMintChangeHandler}
+            placeholder="Amount"
+          />
+          <ReactTooltip id="Mintable" place="top" effect="solid">
+            Privileged accounts will be able to emit new tokens.
+          </ReactTooltip>
+          <Button
+            label={'Increase Supply'}
+            onClick={sendMint}
+            classnames={[' secondary-btn snapshot']}
+          />
+        </div>
+      </div>
+      {/* row #2 */}
+      <div className="row">
+        <div className="column">
+          <InputComponent
+            type="text"
+            label="recipientAddress"
+            labelName="Transfer"
+            toolTip="Transfer"
+            value={transfer.recipientAddress}
+            onChange={onTransferChangeHandler}
+            placeholder="Recipient Address"
+          />
+          <ReactTooltip id="Transfer" place="top" effect="solid">
+            Transfers _value amount of tokens to address _to, and MUST fire the Transfer event.
+          </ReactTooltip>
+          <InputComponent
+            tokenManager={'tokenManager'}
+            type="number"
+            label="amount"
+            value={transfer.amount}
+            onChange={onTransferChangeHandler}
+            placeholder="Amount"
+          />
+          <Button
+            label={'Transfer'}
+            onClick={sendTransfer}
+            classnames={[' secondary-btn snapshot']}
+          />
+        </div>
+        <div className="column">
+          <InputComponent
+            type="text"
+            label="ownerAddress"
+            labelName="Allowance"
+            value={allowance.ownerAddress}
+            toolTip="Allowance"
+            onChange={onAllowanceChangeHandler}
+            placeholder="Owner Address"
+          />
+          <ReactTooltip id="Allowance" place="top" effect="solid">
+            Returns the amount which _spender is still allowed to withdraw from _owner.
+          </ReactTooltip>
+          <InputComponent
+            tokenManager={'tokenManager'}
+            type="text"
+            label="spenderAddress"
+            value={allowance.spenderAddress}
+            onChange={onAllowanceChangeHandler}
+            placeholder="Spender Address"
+          />
+          <Button
+            label={'Allowance'}
+            onClick={submit}
+            classnames={[' secondary-btn snapshot']}
+          />
+        </div>
+      </div>
+      {/* row #3 */}
+      <div className="row">
+        <div className="column">
+          <InputComponent
+            type="text"
+            label="senderAddress"
+            labelName="TransferFrom"
+            toolTip="TransferFrom"
+            value={transferFrom.senderAddress}
+            onChange={onTransferFromChangeHandler}
+            placeholder="Owner Address"
+          />
+          <ReactTooltip id="TransferFrom" place="top" effect="solid">
+            Transfers _value amount of tokens to address _to.
+          </ReactTooltip>
+          <InputComponent
+            tokenManager={'tokenManager'}
+            type="text"
+            label="recipientAddress"
+            value={transferFrom.recipientAddress}
+            onChange={onTransferFromChangeHandler}
+            placeholder="Recipient Address"
+          />
+          <InputComponent
+            tokenManager={'tokenManager'}
+            type="number"
+            label="amount"
+            value={transferFrom.amount}
+            onChange={onTransferFromChangeHandler}
+            placeholder="Amount"
+          />
+          <Button
+            label={'TransferFrom'}
+            onClick={submit}
+            classnames={[' secondary-btn snapshot']}
+          />
+        </div>
+        <div className="column">
+          <InputComponent
+            type="text"
+            label="spenderAddress"
+            labelName="Approve"
+            value={approve.spenderAddress}
+            toolTip="Approve"
+            onChange={onApproveChangeHandler}
+            placeholder="Spender Address"
+          />
+          <ReactTooltip id="Approve" place="top" effect="solid">
+            Allows _spender to withdraw from your account multiple times, up to the _value amount.
+          </ReactTooltip>
+          <InputComponent
+            tokenManager={'tokenManager'}
+            type="number"
+            label="amount"
+            value={approve.amount}
+            onChange={onApproveChangeHandler}
+            placeholder="Amount"
+          />
+          <Button
+            label={'Approve'}
+            onClick={submit}
+            classnames={[' secondary-btn snapshot']}
+          />
+        </div>
+      </div>
+      {/* row #4 */}
+      <div className="row">
+        <div className="column">
+          <InputComponent
+            type="number"
+            label="Airdrop"
+            labelName="Airdrop"
+            toolTip="Airdrop"
+            value={airdropAmount}
+            onChange={(e) => setAirdropAmount(e.target.value)}
+            placeholder="Number of Tokens"
+          />
+          <ReactTooltip id="Airdrop" place="top" effect="solid">
+            Provide csv or json file with addresses to bulk send tokens to
+          </ReactTooltip>
+          <ButtonGroups>
+            <Button
+              label={'Choose File'}
+              onClick={submit}
+              classnames={[' secondary-btn snapshot']}
+            />
+            <Button
+              label={'Airdrop'}
+              onClick={submit}
+              classnames={[' secondary-btn snapshot']}
+            />
+          </ButtonGroups>
+        </div>
+        <div className="column"></div>
+      </div>
+
+      <div className="snapshot-pause-btn">
+        <Button
+          label={'Take Snapshot'}
+          classnames={[' secondary-btn snapshot']}
         />
-        <button>Query Balance</button>
-
-        <div className="title">Transfer</div>
-        <div className="description">Transfers _value amount of tokens to address _to, and MUST fire the Transfer event.</div>
-        <input 
-          type="text" 
-          placeholder="Recipient Address"
-          required 
-          value={transferRecipientAddress}
-          onChange={(e) => setTransferRecipientAddress(e.target.value)}
-        />        <input 
-        type="number" 
-        placeholder="Amount"
-        required 
-        value={transferAmount}
-        onChange={(e) => setTransferAmount(e.target.value)}
-      />
-        <button>Transfer</button>
-
-        <div className="title">TransferFrom</div>
-        <div className="description">Transfers _value amount of tokens to address _to.</div>
-        <input 
-          type="text" 
-          placeholder="Sender Address"
-          required 
-          value={transferFromSenderAddress}
-          onChange={(e) => setTransferFromSenderAddress(e.target.value)}
-        />        
-        <input 
-        type="text" 
-        placeholder="Recipient Address"
-        required 
-        value={transferFromRecipientAddress}
-        onChange={(e) => setTransferFromRecipientAddress(e.target.value)}
-      />
-        <input 
-        type="number" 
-        placeholder="Amount"
-        required 
-        value={transferFromAmount}
-        onChange={(e) => setTransferFromAmount(e.target.value)}
-      />
-        <button>TransferFrom</button>
-
-        <div className="title">Airdrop</div>
-        <div className="description">Provide csv or json file with addresses to bulk send tokens to</div>
-        <input 
-          type="number" 
-          placeholder="Number of Tokens"
-          required 
-          value={airdropAmount}
-          onChange={(e) => setAirdropAmount(e.target.value)}
+        <Button
+          label={' Emergency Pause'}
+          classnames={[' secondary-btn emergency']}
         />
-        <button>Choose File</button>
-        <button>Airdrop</button>
-
-        <div className="title">Mintable</div>
-        <div className="description">Privileged accounts will be able to emit new tokens.</div>
-        <input 
-          type="number" 
-          placeholder="Amount"
-          required 
-          value={mintableAmount}
-          onChange={(e) => setMintableAmount(e.target.value)}
-        />
-        <button>Increase Supply</button>
-
-        <div className="title">Allowance</div>
-        <div className="description">Returns the amount which _spender is still allowed to withdraw from _owner.</div>
-        <input 
-          type="text" 
-          placeholder="Owner Address"
-          required 
-          value={allowanceOwnerAddress}
-          onChange={(e) => setAllowanceOwnerAddress(e.target.value)}
-        />        <input 
-        type="text" 
-        placeholder="Spender Address"
-        required 
-        value={allowanceSpenderAddress}
-        onChange={(e) => setAllowanceSpenderAddress(e.target.value)}
-      />
-        <button>Allowance</button>
-
-        <div className="title">Approve</div>
-        <div className="description">Allows _spender to withdraw from your account multiple times, up to the _value amount.</div>
-        <input 
-          type="text" 
-          placeholder="Spender Address"
-          required 
-          value={approveSpenderAddress}
-          onChange={(e) => setApproveSpenderAddress(e.target.value)}
-        />        <input 
-        type="number" 
-        placeholder="Amount"
-        required 
-        value={approveAmount}
-        onChange={(e) => setApproveAmount(e.target.value)}
-      />
-        <button>Approve</button>
-
-    <div className="title">Emergency Pause</div>
-      <button>Pause Token Activity</button>
-    </div>
-  );
+      </div>
+    </TokenManagerForm>  
+    )}
+  </>
+  )
 }
- 
-export default Scripts;
+
+export default TokenManagerScripts
