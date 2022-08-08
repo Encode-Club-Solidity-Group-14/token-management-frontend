@@ -37,7 +37,6 @@ function App() {
   const loadUserAddress = async () => {
     if (isAuthenticated) {
       const addressConnected = user?.get('ethAddress')
-      console.log(user);
       if (addressConnected) {
         const start = addressConnected.substring(0, 5)
         const end = addressConnected.substring(
@@ -87,7 +86,7 @@ function App() {
             path="/token-manager"
             element={
               <ProtectedRoute>
-                <TokenManager />
+                <TokenManager loadUserAddress={loadUserAddress}/>
               </ProtectedRoute>
             }
           />
