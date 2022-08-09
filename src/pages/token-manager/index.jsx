@@ -5,6 +5,8 @@ import { useMoralis } from "react-moralis"
 import { useEffect, useState } from "react"
 import Select from 'react-select'
 import TokenManagerScripts from "../../components/TokenManagerScripts";
+import TransactionHistory from "../transaction-history";
+import TopHoldersHistory from "../holders-history";
 
 const TokenManager = (props) => {
   const {
@@ -24,7 +26,7 @@ const TokenManager = (props) => {
   }, [user])
   
   const [userAddress, setUserAddress] = useState("")
-  const [tokenAddress, setTokenAddress] = useState("")
+  const [token, setToken] = useState("")
   const [userTokenList, setUserTokenList] = useState([])
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const TokenManager = (props) => {
       Moralis.Cloud.run("getERC20Tokens", {userAddress: user.attributes.ethAddress}).then((data)=> {
         if(data){
           data.map((token) => {
-            listTokens.push({value: token.attributes.address, label: token.attributes.name});
+            listTokens.push({value: token, label: token.attributes.name});
             if(listTokens.length > 0){
               setUserTokenList(listTokens)
             }
@@ -47,16 +49,20 @@ const TokenManager = (props) => {
 
   const selected = (e) => {
     console.log(e.value)
-    setTokenAddress(e.value)
+    setToken(e.value)
   }
 
   return (
       <MainContainer>
-      <Summary />
+      <Summary tokenAddress={token?.attributes?.address} />
       <ManagerMain>
-        <h3 className="bold color-primary">Token Manager - {tokenAddress}</h3>
+        {props.scripts && <h3 className="bold color-primary">Manager</h3>}
+        {props.tokenHistory && <h3 className="bold color-primary">Transaction History</h3>}
+        {props.topTokenHolders && <h3 className="bold color-primary">Top Holders</h3>}
         <Select options={userTokenList} onChange={selected}/>
-        <TokenManagerScripts tokenAddress={tokenAddress}/>
+        {props.scripts && <TokenManagerScripts token={token}/>}
+        {props.tokenHistory && <TransactionHistory token={token} />}
+        {props.topTokenHolders && <TopHoldersHistory token={token} />}
       </ManagerMain>
     </MainContainer>
   );

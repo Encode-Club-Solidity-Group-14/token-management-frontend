@@ -2,7 +2,7 @@ import ProfileSummary from "./Profile-Summary";
 import { OverviewSection } from "./styles";
 import TokenOverview from "./Token-overview";
 
-const Summary = () => {
+const Summary = (props) => {
   return (
     <OverviewSection>
       <TokenOverview
@@ -13,11 +13,10 @@ const Summary = () => {
         holders={`$300,000M`}
       />
       <ProfileSummary
-        contract={"Address"}
-        title="Profile Pummary"
-        website={"EncodeTeam4@BossLevelShii.com"}
-        socialProfiles="peace out"
-        support={"Trixie"}
+        contract={props.tokenAddress}
+        title="Profile Summary"
+        website={"cliet_input"}
+        support={"trixie@support.com"}
       />
     </OverviewSection>
   );

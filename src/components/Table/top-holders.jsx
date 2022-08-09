@@ -25,7 +25,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const TopHolders = ({row}) => {
   const { address, quantity, percentage, usdValue } = row;
   return (
-    <StyledTableRow key={address}>
+    <StyledTableRow key={row}>
       <StyledTableCell component="th" scope="row">
         {address}
       </StyledTableCell>

@@ -8,11 +8,10 @@ const Navigation = ({ linkNames }) => {
       <Logo />
       <ul>
         {linkNames?.map((linkName, index) => (
-          <li>
+          <li key={index}>
             <NavBtnLink
-              exact
+              exact="true"
               className={({ isActive }) => isActive && console.log(isActive)}
-              activeClassName={{Style: {fontWeight: '700'}}}
               to={`${linkName.to}`}
             >
               {linkName.link}
