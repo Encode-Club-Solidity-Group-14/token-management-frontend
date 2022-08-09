@@ -1,40 +1,76 @@
-import React from "react";
-import Button from "../../components/ButtonComponent/Button";
-import Navigation from "../../components/Navigation";
-import CustomizedTables from "../../components/Table";
+import React from 'react'
+import logo from '../../assets/alien-reading-book-animation.gif'
+import CustomizedTables from '../../components/Table'
 import {
   transactionHistoryHeaders,
-  transactionHistoryRows,
-} from "../../components/Table/transaction-data";
-import Summary from "../../components/tokenOverview-profileSummary";
-import { MainContainer, NavWrapper } from "../../themes/container";
-import { ManagerMain } from "../token-manager/styles";
+  createData,
+} from '../../components/Table/transaction-data'
+import { decode } from './utils/input-converter'
+import { useMoralis } from 'react-moralis'
+import { useEffect, useState } from 'react'
 
-const TransactionHistory = () => {
+const TransactionHistory = (props) => {
+
+  const { user, Moralis} = useMoralis()
+  const [isLoading, setIsLoading] = useState(false)
+  const [transactionHistory, setTransactionHistory] = useState([])
+
+  useEffect(() => {
+    setIsLoading(true)
+    if (user) {
+      const fetchData = async () => {
+        const query = new Moralis.Query('EthTransactions')
+        query.equalTo(
+          'to_address',
+          props.token?.attributes?.address.toLowerCase(),
+        )
+        const results = await query.find()
+        if (results) {
+          let transactions = []
+          results.map((tx) => {
+            const transaction = {
+              from: tx.attributes.from_address,
+              to: tx.attributes.to_address,
+              quantity: 1,
+              time: String(tx.createdAt).split("(")[0],
+              method: decode(tx.attributes.input, props.token?.attributes?.type),
+              txHash: tx.attributes.hash,
+            }
+            transactions.push(
+              createData(
+                transaction.from,
+                transaction.to,
+                transaction.quantity,
+                transaction.time,
+                transaction.method,
+                transaction.txHash,
+              ),
+            )
+          })
+          setTransactionHistory(transactions)
+        }
+      }
+      fetchData().catch((error) => {
+        console.error(error)
+        setIsLoading(false)
+      })
+      setIsLoading(false)
+    }
+  }, [user, props])
+
   return (
-    <MainContainer>
-      {/* <NavWrapper>
-        <Navigation
-          linkNames={[
-            { link: "Token Manager", to: "/token-manager" },
-            { link: "Transaction History", to: "/transaction-history" },
-            { link: "Holders", to: "/top-holders" },
-            { link: "Analytics", to: "#" },
-          ]}
-        />
-        <Button label={"Connect Wallet"} classnames={["secondary-btn"]} />
-      </NavWrapper> */}
-      <Summary />
-      <ManagerMain>
-        <h3 className="bold color-primary">Transaction History</h3>
+    <>
+      {isLoading ? (
+        <LoadingSpinner logo={logo} />
+      ) : (
         <CustomizedTables
           dataType="transaction-history"
-          rows={transactionHistoryRows}
+          rows={transactionHistory}
           tableHeaders={transactionHistoryHeaders}
         />
-      </ManagerMain>
-    </MainContainer>
-  );
-};
+      )}
+    </>
+  )
+}
 
-export default TransactionHistory;
+export default TransactionHistory
