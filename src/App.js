@@ -7,8 +7,6 @@ import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import { M, MainContainer, NavWrapper } from "./themes/container";
 import TokenManager from "./pages/token-manager";
-import TransactionHistory from "./pages/transaction-history";
-import TopHoldersHistory from "./pages/holders-history";
 import { ProtectedRoute } from "./ProtectedRoutes";
 import React from "react";
 import { useNavigate } from "react-router-dom"
@@ -56,10 +54,10 @@ function App() {
           <NavWrapper>
             <Navigation
               linkNames={[
-                { link: 'Token Manager', to: '/token-manager' },
-                { link: 'Transaction History', to: '/transaction-history' },
-                { link: 'Holders', to: '/top-holders' },
-                { link: 'Analytics', to: '#' },
+                { id:"1", link: 'Token Manager', to: '/token-manager' },
+                { id:"2", link: 'Transaction History', to: '/transaction-history' },
+                { id:"3", link: 'Holders', to: '/top-holders' },
+                { id:"4", link: 'Analytics', to: '#' },
               ]}
             />
             <Button label={userWallet} classnames={['secondary-btn']} />
@@ -86,7 +84,7 @@ function App() {
             path="/token-manager"
             element={
               <ProtectedRoute>
-                <TokenManager loadUserAddress={loadUserAddress}/>
+                <TokenManager loadUserAddress={loadUserAddress} scripts={true}/>
               </ProtectedRoute>
             }
           />
@@ -94,7 +92,7 @@ function App() {
             path="/transaction-history"
             element={
               <ProtectedRoute>
-                <TransactionHistory />
+                <TokenManager loadUserAddress={loadUserAddress} tokenHistory={true}/>
               </ProtectedRoute>
             }
           />
@@ -102,7 +100,7 @@ function App() {
             path="/top-holders"
             element={
               <ProtectedRoute>
-                <TopHoldersHistory />
+                <TokenManager loadUserAddress={loadUserAddress} topTokenHolders={true}/>
               </ProtectedRoute>
             }
           />

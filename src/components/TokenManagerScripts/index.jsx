@@ -9,16 +9,7 @@ import { useMoralis } from "react-moralis";
 import { useState } from 'react'
 
 const TokenManagerScripts = (props) => {
-  const {
-    authenticate,
-    isAuthenticated,
-    isAuthenticating,
-    user,
-    account,
-    logout,
-    Moralis,
-    provider,
-  } = useMoralis()
+  const {user,Moralis} = useMoralis()
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -90,10 +81,11 @@ const TokenManagerScripts = (props) => {
   const submit = async () => {}
 
   const sendBalanceOf = async () => {
+    console.log(balanceOf)
     setBalanceOf({ ...balanceOf, ["amount"]: "" })
     await Moralis.enableWeb3();
     const sendOptions = {
-      contractAddress: props.tokenAddress,
+      contractAddress: props.token?.attributes?.address,
       functionName: "balanceOf",
       abi: ERC20_ABI,
       params: {
@@ -109,7 +101,7 @@ const TokenManagerScripts = (props) => {
     setIsLoading(true)
     await Moralis.enableWeb3();
     const sendOptions = {
-      contractAddress: props.tokenAddress,
+      contractAddress: props.token?.attributes?.address,
       functionName: "mint",
       abi: ERC20_MINT_ABI,
       params: {
@@ -137,7 +129,7 @@ const TokenManagerScripts = (props) => {
     console.log(transfer)
     await Moralis.enableWeb3();
     const sendOptions = {
-      contractAddress: props.tokenAddress,
+      contractAddress: props.token?.attributes?.address,
       functionName: "transfer",
       abi: ERC20_ABI,
       params: {
