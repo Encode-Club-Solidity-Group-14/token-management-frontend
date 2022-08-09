@@ -23,14 +23,16 @@ const TopHoldersHistory = (props) => {
           contractAddress: props.token?.attributes?.address.toLowerCase()
           }
         const result = await Moralis.Plugins.covalent.getBlockTokenHolders(options);
+        console.log("Covalent response:");
+        console.log(result?.data?.items);
+        let holders = [];
         if(result){
           let ownerBalance = props.totalSupply;
-          let holders = [];
           result.data.items.map((user) => {
             ownerBalance = ownerBalance - user.balance;
             const holder = {
               address: user.address,
-              balance: user.balance,
+              balance: String(user.balance),
               percentage: percentage(user.balance, props.totalSupply)+"%",
               balanceInUSD: "$"+user.balance //TODO learn how to get this value fom uni or datafeeds IDK
             }
@@ -43,16 +45,20 @@ const TopHoldersHistory = (props) => {
           })
           const owner = {
             address: "OWNER",
-            balance: ownerBalance,
+            balance: String(ownerBalance),
             percentage: percentage(ownerBalance, props.totalSupply)+"%",
             balanceInUSD: "$"+ownerBalance //TODO learn how to get this value fom uni or datafeeds IDK
           }
-          holders.push(createData(
-            owner.address,
-            owner.balance,
-            owner.percentage,
-            owner.balanceInUSD
-          ))
+          if(owner.balance !== undefined && owner.balance !== "" && owner.balance > 0){  
+            holders.push(createData(
+              owner.address,
+              owner.balance,
+              owner.percentage,
+              owner.balanceInUSD
+            ))
+          }
+          console.log("Trixie - Holders:");
+          console.log(holders);
           setHolderHistory(holders);
         }
       }
