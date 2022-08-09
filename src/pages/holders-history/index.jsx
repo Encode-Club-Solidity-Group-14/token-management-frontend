@@ -14,7 +14,7 @@ const TopHoldersHistory = (props) => {
   const submit = async () => {
     console.log("teste")
     const options = {
-      chainId: 3,
+      chainId: 42,
       contractAddress: props.token?.attributes?.address.toLowerCase()
       }
     const result = await Moralis.Plugins.covalent.getBlockTokenHolders(options);
