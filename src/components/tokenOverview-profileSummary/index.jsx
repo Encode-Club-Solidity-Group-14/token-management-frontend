@@ -8,7 +8,7 @@ const Summary = (props) => {
       <TokenOverview
         price={`$200`}
         marketCap={`$ 3000M`}
-        totalSupply={`200K`}
+        totalSupply={props.totalSupply}
         title="Token Overview"
         holders={`$300,000M`}
       />
