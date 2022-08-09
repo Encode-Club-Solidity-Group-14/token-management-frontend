@@ -14,7 +14,7 @@ const Summary = (props) => {
       />
       <ProfileSummary
         contract={props.tokenAddress}
-        title="Profile Pummary"
+        title="Profile Summary"
         website={"EncodeTeam4@BossLevelShii.com"}
         socialProfiles="peace out"
         support={"Trixie"}
