@@ -4,6 +4,7 @@ import ERC20_MINT_JSON from "./ERC20Mintable.json"
 import ERC20_PAUSABLE_JSON from "./ERC20Pausable.json"
 import ERC20_BURNABLE_JSON from "./ERC20Burnable.json"
 import ERC20_MINT_BURN_PAUSE_JSON from "./ERC20MintBurnPause.json"
+import ERC20_AIRDROP_JSON from "./ERC20AirDrop.json"
 
 export const tokenFactoryABI = TokenFactory.abi;
 export const ERC20_ABI = ERC20.abi;
@@ -11,6 +12,7 @@ export const ERC20_MINT_ABI = ERC20_MINT_JSON.abi;
 export const ERC20_PAUSABLE_ABI = ERC20_PAUSABLE_JSON.abi;
 export const ERC20_BURNABLE_ABI = ERC20_BURNABLE_JSON.abi;
 export const ERC20_MINT_BURN_PAUSE_ABI = ERC20_MINT_BURN_PAUSE_JSON.abi;
+export const ERC20_AIRDROP_ABI = ERC20_AIRDROP_JSON.abi;
 
 //Ropsten Network
 // export const tokenFactoryAddress = "0x5E0f0240dE7Ff0d80a3eead4c1350C2a2Ba07fDe";
