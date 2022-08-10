@@ -174,12 +174,13 @@ const TokenGenerator = (props) => {
     setIsLoading(true)
     await Moralis.enableWeb3()
     console.log("Deploying via moralis...")
+    const {address, type} = findAddress(tokenCharacteristc);
     const sendOptions = {
       contractAddress: tokenFactoryAddress,
       functionName: "createERC20",
       abi: tokenFactoryABI,
       params: {
-        libraryAddress_: findAddress(tokenCharacteristc),
+        libraryAddress_: address,
         name_: tokenDetails.name,
         symbol_: tokenDetails.symbol,
         decimals_: 18,
@@ -208,7 +209,7 @@ const TokenGenerator = (props) => {
       token.set("name", tokenDetails.name)
       token.set("symbol", tokenDetails.symbol)
       token.set("address", data)
-      token.set("type", "ERC20")
+      token.set("type", type)
       token.save()
     }
     setIsLoading(false)

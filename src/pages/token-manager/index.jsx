@@ -7,7 +7,9 @@ import Select from 'react-select'
 import TokenManagerScripts from "../../components/TokenManagerScripts";
 import TransactionHistory from "../transaction-history";
 import TopHoldersHistory from "../holders-history";
-import { ERC20_ABI } from "../../abis/constants"
+import { isPausable} from '../../pages/token-generator/token-generator';
+import { ERC20_ABI, ERC20_PAUSABLE_ABI  } from "../../abis/constants";
+import { toast } from "react-toastify";
 
 const TokenManager = (props) => {
   const {
@@ -23,10 +25,11 @@ const TokenManager = (props) => {
 
   useEffect(() => {
     props.loadUserAddress()
-    setUserAddress(user?.get("ethAddress"));
   }, [user])
   
-  const [userAddress, setUserAddress] = useState("")
+  const [pausable, setPausable] = useState({
+    isPaused: false
+  })
   const [token, setToken] = useState("")
   const [tokenTotalSupply, setTokenTotalSupply] = useState("")
   const [userTokenList, setUserTokenList] = useState([])
@@ -61,11 +64,26 @@ const TokenManager = (props) => {
         }
         const totalSupply = await Moralis.executeFunction(sendOptions);
         setTokenTotalSupply(totalSupply.toString());
+        if(isPausable(token.attributes.type)){
+          const contractAddress = token?.attributes?.address;
+          const sendOptions = {
+            contractAddress: contractAddress,
+            functionName: "paused",
+            abi: ERC20_PAUSABLE_ABI,
+            params: {
+              account: contractAddress
+            },
+          }
+          const isPaused = await Moralis.executeFunction(sendOptions)  
+          .catch(
+            (error) => {toast.error(error.message)}
+          );
+          setPausable({ ...pausable, ["isPaused"]: isPaused })
+        }
       }
       fetchData().catch((error) => {
         console.error(error)
       })
-      
     }
 
   }, [token])
@@ -83,7 +101,7 @@ const TokenManager = (props) => {
         {props.tokenHistory && <h3 className="bold color-primary">Transaction History</h3>}
         {props.topTokenHolders && <h3 className="bold color-primary">Top Holders</h3>}
         <Select options={userTokenList} onChange={selected}/>
-        {props.scripts && <TokenManagerScripts token={token}/>}
+        {props.scripts && <TokenManagerScripts token={token} isPaused={pausable.isPaused} setPausable={setPausable} setTokenTotalSupply={setTokenTotalSupply}/>}
         {props.tokenHistory && <TransactionHistory token={token} />}
         {props.topTokenHolders && <TopHoldersHistory token={token} totalSupply={tokenTotalSupply}/>}
       </ManagerMain>
