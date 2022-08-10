@@ -7,6 +7,7 @@ import Select from 'react-select'
 import TokenManagerScripts from "../../components/TokenManagerScripts";
 import TransactionHistory from "../transaction-history";
 import TopHoldersHistory from "../holders-history";
+import { ERC20_ABI } from "../../abis/constants"
 
 const TokenManager = (props) => {
   const {
@@ -27,6 +28,7 @@ const TokenManager = (props) => {
   
   const [userAddress, setUserAddress] = useState("")
   const [token, setToken] = useState("")
+  const [tokenTotalSupply, setTokenTotalSupply] = useState("")
   const [userTokenList, setUserTokenList] = useState([])
 
   useEffect(() => {
@@ -47,6 +49,27 @@ const TokenManager = (props) => {
     }
   }, [user])
 
+  useEffect(() => {
+    const tokenAddress = token?.attributes?.address;
+    if(tokenAddress){
+      const fetchData = async () => {
+        await Moralis.enableWeb3();
+        const sendOptions = {
+          contractAddress: token?.attributes?.address,
+          functionName: "totalSupply",
+          abi: ERC20_ABI
+        }
+        const totalSupply = await Moralis.executeFunction(sendOptions);
+        setTokenTotalSupply(totalSupply);
+      }
+      fetchData().catch((error) => {
+        console.error(error)
+      })
+      
+    }
+
+  }, [token])
+
   const selected = (e) => {
     console.log(e.value)
     setToken(e.value)
@@ -54,7 +77,7 @@ const TokenManager = (props) => {
 
   return (
       <MainContainer>
-      <Summary tokenAddress={token?.attributes?.address} />
+      <Summary tokenAddress={token?.attributes?.address} totalSupply={tokenTotalSupply}/>
       <ManagerMain>
         {props.scripts && <h3 className="bold color-primary">Manager</h3>}
         {props.tokenHistory && <h3 className="bold color-primary">Transaction History</h3>}
@@ -62,7 +85,7 @@ const TokenManager = (props) => {
         <Select options={userTokenList} onChange={selected}/>
         {props.scripts && <TokenManagerScripts token={token}/>}
         {props.tokenHistory && <TransactionHistory token={token} />}
-        {props.topTokenHolders && <TopHoldersHistory token={token} />}
+        {props.topTokenHolders && <TopHoldersHistory token={token} totalSupply={tokenTotalSupply}/>}
       </ManagerMain>
     </MainContainer>
   );

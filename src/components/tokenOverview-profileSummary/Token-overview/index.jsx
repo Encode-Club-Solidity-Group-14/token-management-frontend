@@ -9,7 +9,7 @@ const TokenOverview = ({ title, price, marketCap, totalSupply, holders }) => {
       <div className="overview-details">
         <p className="bold-medium">Price: {price}</p>
         <p className="bold-medium">Fully Diluted Market cap: {marketCap}</p>
-        <p className="bold-medium">Total Supply: {totalSupply}</p>
+        <p className="bold-medium">Total Supply: {Number(totalSupply)}</p>
         <p className="bold-medium">Holders: {holders}</p>
       </div>
     </TokenOverViewWrapper>
