@@ -1,6 +1,11 @@
 import { TokenOverViewWrapper } from "./styles";
+import { ethers, BigNumber } from "ethers";
 
-const TokenOverview = ({ title, price, marketCap, totalSupply, holders }) => {
+const TokenOverview = ({ title, price, marketCap, totalSupply, holders, symbol }) => {
+  const fromWei = (num) => {
+    if(num ==="") return 0;
+    return ethers.utils.formatEther(num)
+  } 
   return (
     <TokenOverViewWrapper>
       <header>
@@ -9,7 +14,7 @@ const TokenOverview = ({ title, price, marketCap, totalSupply, holders }) => {
       <div className="overview-details">
         <p className="bold-medium">Price: {price}</p>
         <p className="bold-medium">Fully Diluted Market cap: {marketCap}</p>
-        <p className="bold-medium">Total Supply: {Number(totalSupply)}</p>
+        <p className="bold-medium">Total Supply: {fromWei(totalSupply)} {symbol}</p>
         <p className="bold-medium">Holders: {holders}</p>
       </div>
     </TokenOverViewWrapper>

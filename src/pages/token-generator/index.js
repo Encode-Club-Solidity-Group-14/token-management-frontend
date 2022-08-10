@@ -11,12 +11,13 @@ import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../components/LoadingSpinner/index";
 import Generator from "./token-generator"
 import ReactTooltip from "react-tooltip"
-
 import { tokenFactoryABI, tokenFactoryAddress } from "../../abis/constants"
 import { findAddress } from "./token-generator"
 
 const TokenGenerator = (props) => {
   const [isLoading, setIsLoading] = useState(false)
+
+  const toWei = (num) => ethers.utils.parseEther(num.toString())
 
   const [tokenDetails, setTokenDetails] = useState({
     name: "",
@@ -182,7 +183,7 @@ const TokenGenerator = (props) => {
         name_: tokenDetails.name,
         symbol_: tokenDetails.symbol,
         decimals_: 18,
-        totalSupply_: tokenDetails.supply,
+        totalSupply_: toWei(tokenDetails.supply),
       },
     }
     const transaction = await Moralis.executeFunction(sendOptions)

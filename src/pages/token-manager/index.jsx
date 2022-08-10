@@ -60,7 +60,7 @@ const TokenManager = (props) => {
           abi: ERC20_ABI
         }
         const totalSupply = await Moralis.executeFunction(sendOptions);
-        setTokenTotalSupply(totalSupply);
+        setTokenTotalSupply(totalSupply.toString());
       }
       fetchData().catch((error) => {
         console.error(error)
@@ -77,7 +77,7 @@ const TokenManager = (props) => {
 
   return (
       <MainContainer>
-      <Summary tokenAddress={token?.attributes?.address} totalSupply={tokenTotalSupply}/>
+      <Summary token={token} totalSupply={tokenTotalSupply}/>
       <ManagerMain>
         {props.scripts && <h3 className="bold color-primary">Manager</h3>}
         {props.tokenHistory && <h3 className="bold color-primary">Transaction History</h3>}
