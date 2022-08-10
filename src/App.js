@@ -12,6 +12,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { useMoralis } from "react-moralis";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const routeMatch = useMatch("/")
@@ -49,6 +51,7 @@ function App() {
 
   return (
     <>
+    <ToastContainer />
       {!routeMatch && (
         <MainContainer>
           <NavWrapper>
