@@ -1,5 +1,6 @@
 import React from 'react'
 import logo from '../../assets/alien-reading-book-animation.gif'
+import LoadingSpinner from "../../components/LoadingSpinner/index";
 import CustomizedTables from '../../components/Table'
 import {
   transactionHistoryHeaders,

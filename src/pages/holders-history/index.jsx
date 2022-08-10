@@ -1,6 +1,5 @@
 import React from 'react'
 import CustomizedTables from '../../components/Table'
-import Button from '../../components/ButtonComponent/Button'
 import {
   holdersHeaders,
   createData,
@@ -8,8 +7,11 @@ import {
 import { useMoralis } from 'react-moralis'
 import { percentage } from './utils/percentage-calculator'
 import { useEffect, useState } from 'react'
+import { ethers, BigNumber } from "ethers";
 
 const TopHoldersHistory = (props) => {
+
+  const fromWei = (num) => ethers.utils.formatEther(num)
 
   const { user, Moralis} = useMoralis();
   const [holderHistory, setHolderHistory] = useState([])
@@ -33,12 +35,12 @@ const TopHoldersHistory = (props) => {
             const holder = {
               address: user.address,
               balance: String(user.balance),
-              percentage: percentage(user.balance, props.totalSupply)+"%",
-              balanceInUSD: "$"+user.balance //TODO learn how to get this value fom uni or datafeeds IDK
+              percentage: percentage(user.balance, props.totalSupply).toFixed(2)+"%",
+              balanceInUSD: "$"+ fromWei(user.balance) //TODO learn how to get this value fom uni or datafeeds IDK
             }
             holders.push(createData(
               holder.address,
-              holder.balance,
+              fromWei(holder.balance),
               holder.percentage,
               holder.balanceInUSD
             ))
@@ -46,13 +48,13 @@ const TopHoldersHistory = (props) => {
           const owner = {
             address: "OWNER",
             balance: String(ownerBalance),
-            percentage: percentage(ownerBalance, props.totalSupply)+"%",
-            balanceInUSD: "$"+ownerBalance //TODO learn how to get this value fom uni or datafeeds IDK
+            percentage: percentage(ownerBalance, props.totalSupply).toFixed(2)+"%",
+            balanceInUSD: "$"+ fromWei(ownerBalance.toString()) //TODO learn how to get this value fom uni or datafeeds IDK
           }
           if(owner.balance !== undefined && owner.balance !== "" && owner.balance > 0){  
             holders.push(createData(
               owner.address,
-              owner.balance,
+              fromWei(owner.balance),
               owner.percentage,
               owner.balanceInUSD
             ))

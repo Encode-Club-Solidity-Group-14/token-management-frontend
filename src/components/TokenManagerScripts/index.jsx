@@ -7,9 +7,13 @@ import ReactTooltip from 'react-tooltip'
 import { ERC20_ABI, ERC20_MINT_ABI } from "../../abis/constants"
 import { useMoralis } from "react-moralis";
 import { useState } from 'react'
+import { ethers, BigNumber } from "ethers";
 
 const TokenManagerScripts = (props) => {
   const {user,Moralis} = useMoralis()
+
+  const toWei = (num) => ethers.utils.parseEther(num.toString())
+  const fromWei = (num) => ethers.utils.formatEther(num)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -94,7 +98,7 @@ const TokenManagerScripts = (props) => {
     }
     const balance = await Moralis.executeFunction(sendOptions);
     console.log(balance)
-    setBalanceOf({ ...balanceOf, ["amount"]: balance })
+    setBalanceOf({ ...balanceOf, ["amount"]: fromWei(balance) })
   }
   
   const sendMint = async () => {
@@ -107,7 +111,7 @@ const TokenManagerScripts = (props) => {
       params: {
         from: user?.get("ethAddress"),
         to: mint.recipientAddress,
-        amount: mint.amount
+        amount: toWei(mint.amount)
       },
     }
     const transaction = await Moralis.executeFunction(sendOptions)
@@ -135,7 +139,7 @@ const TokenManagerScripts = (props) => {
       params: {
         from: user?.get("ethAddress"),
         to: transfer.recipientAddress,
-        amount: transfer.amount
+        amount: toWei(transfer.amount)
       },
     }
     const transaction = await Moralis.executeFunction(sendOptions)
@@ -177,7 +181,7 @@ const TokenManagerScripts = (props) => {
             onClick={sendBalanceOf}
             classnames={[' secondary-btn snapshot']}
           />
-        {balanceOf.amount !== "" && `Balance: ${balanceOf.amount}`}
+        {balanceOf.amount !== "" && `Balance: ${balanceOf.amount} ${props.token?.attributes?.symbol}`}
         </div>
         <div className="column">
           <InputComponent
