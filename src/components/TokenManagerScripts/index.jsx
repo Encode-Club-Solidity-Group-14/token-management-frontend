@@ -38,6 +38,7 @@ const TokenManagerScripts = (props) => {
   const [allowance, setAllowance] = useState({
     ownerAddress: "",
     spenderAddress: "",
+    allowedAddress:"",
     amount: ""
   })
   // Increase Allowance Properties
@@ -93,12 +94,12 @@ const TokenManagerScripts = (props) => {
 
   const onIncreaseAllowanceChangeHandler = (e) => {
     const { name, value } = e.target
-    setIncreaseAllowance({ ...allowance, [name]: value })
+    setIncreaseAllowance({ ...increaseAllowance, [name]: value })
   }
 
   const onDecreaseAllowanceChangeHandler = (e) => {
     const { name, value } = e.target
-    setDecreaseAllowance({ ...allowance, [name]: value })
+    setDecreaseAllowance({ ...decreaseAllowance, [name]: value })
   }  
 
   const onBalanceChangeHandler = (e) => {
@@ -229,8 +230,13 @@ const TokenManagerScripts = (props) => {
         setIsLoading(false)
       },
     );
-    console.log(amount)
-    setAllowance({...allowance, ["amount"]: amount})
+    let newAllowance = {
+      ownerAddress: allowance.ownerAddress,
+      spenderAddress: allowance.spenderAddress,
+      allowedAddress: allowance.spenderAddress,
+      amount: amount
+    }
+    setAllowance(newAllowance)
     setIsLoading(false)
   }  
   
@@ -571,7 +577,7 @@ const TokenManagerScripts = (props) => {
             onClick={sendAllowance}
             classnames={[' secondary-btn snapshot']}
           />
-        {allowance.amount !== "" && `Allowance to ${allowance.spenderAddress}: ${fromWei(allowance.amount)} ${props.token?.attributes?.symbol}`}
+        {allowance.amount !== "" && `Allowance to ${allowance.allowedAddress}: ${fromWei(allowance.amount)} ${props.token?.attributes?.symbol}`}
         </div>
       </div>
       {/* row #3 */}
