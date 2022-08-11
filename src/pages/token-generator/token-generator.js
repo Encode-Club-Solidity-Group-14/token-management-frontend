@@ -10,7 +10,7 @@ import {
   ERC20_SNAPSHOTS,
   ERC20_ABI,
   ERC20_MINT_ABI,
-  ERC20_PAUSABLE_ABI,
+  ERC20_AIRDROP_ABI,
   ERC20_BURNABLE_ABI,
   ERC20_MINT_BURN_PAUSE_ABI,
 } from '../../abis/constants'
@@ -170,6 +170,8 @@ export function getABI(type) {
       return ERC20_MINT_ABI
     case 'ERC20_BURN':
       return ERC20_BURNABLE_ABI
+    case 'ERC20_AIRDROP':
+      return ERC20_AIRDROP_ABI
     default:
       return ERC20_MINT_BURN_PAUSE_ABI //TODO missing vote
   }

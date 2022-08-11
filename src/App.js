@@ -14,6 +14,9 @@ import { useEffect, useState } from "react"
 import { useMoralis } from "react-moralis";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Buffer } from "buffer/";
+import Claim from "./pages/claim";
+window.Buffer = window.Buffer || Buffer;
 
 function App() {
   const routeMatch = useMatch("/")
@@ -61,6 +64,7 @@ function App() {
                 { id:"2", link: 'Transaction History', to: '/transaction-history' },
                 { id:"3", link: 'Holders', to: '/top-holders' },
                 { id:"4", link: 'Analytics', to: '#' },
+                { id:"5", link: 'Claim Tokens!!!', to: '/claim' },
               ]}
             />
             <Button label={userWallet} classnames={['secondary-btn']} />
@@ -104,6 +108,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <TokenManager loadUserAddress={loadUserAddress} topTokenHolders={true}/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/claim"
+            element={
+              <ProtectedRoute>
+                <Claim loadUserAddress={loadUserAddress}/>
               </ProtectedRoute>
             }
           />

@@ -4,12 +4,13 @@ import LoadingSpinner from "../../components/LoadingSpinner/index";
 import InputComponent from '../../components/Input'
 import Button from '../../components/ButtonComponent/Button'
 import ReactTooltip from 'react-tooltip'
-import { ERC20_ABI, ERC20_MINT_ABI, ERC20_PAUSABLE_ABI, ERC20_BURNABLE_ABI } from "../../abis/constants"
+import { ERC20_ABI, ERC20_MINT_ABI, ERC20_PAUSABLE_ABI, ERC20_BURNABLE_ABI, ERC20_AIRDROP_ABI} from "../../abis/constants"
 import { useMoralis } from "react-moralis";
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ethers} from "ethers";
 import { isBurnable, isMint, isPausable, isSnaphots, isAirdrop} from '../../pages/token-generator/token-generator';
 import { toast } from "react-toastify";
+import {createMerkleRoot} from "./utils/merkleTreeUtils";
 
 const TokenManagerScripts = (props) => {
   const {user, Moralis} = useMoralis();
@@ -37,6 +38,7 @@ const TokenManagerScripts = (props) => {
   const [allowance, setAllowance] = useState({
     ownerAddress: "",
     spenderAddress: "",
+    allowedAddress:"",
     amount: ""
   })
   // Increase Allowance Properties
@@ -65,7 +67,10 @@ const TokenManagerScripts = (props) => {
     amount: ""
   })
   // Airdrop properties
-  const [airdropAmount, setAirdropAmount] = useState('')
+  const [airDrop, setAirDrop] = useState({
+    amount: "",
+    addresses: ""
+  })
 
   const onTransferFromChangeHandler = (e) => {
     const { name, value } = e.target
@@ -89,12 +94,12 @@ const TokenManagerScripts = (props) => {
 
   const onIncreaseAllowanceChangeHandler = (e) => {
     const { name, value } = e.target
-    setIncreaseAllowance({ ...allowance, [name]: value })
+    setIncreaseAllowance({ ...increaseAllowance, [name]: value })
   }
 
   const onDecreaseAllowanceChangeHandler = (e) => {
     const { name, value } = e.target
-    setDecreaseAllowance({ ...allowance, [name]: value })
+    setDecreaseAllowance({ ...decreaseAllowance, [name]: value })
   }  
 
   const onBalanceChangeHandler = (e) => {
@@ -112,7 +117,14 @@ const TokenManagerScripts = (props) => {
     setBurn({ ...mint, [name]: value })
   }
 
-  const submit = async () => {}
+  const onAirDropChangeHandler = (e) => {
+    const { name, value } = e.target
+    setAirDrop({ ...airDrop, [name]: value })
+  } 
+
+  const submit = async () => {
+    alert("Not implemented");
+  }
 
   const sendBalanceOf = async () => {
     console.log(balanceOf)
@@ -193,7 +205,7 @@ const TokenManagerScripts = (props) => {
     const result = await transaction.wait();
     console.log(result)
     setIsLoading(false)
-    toast.success("Tranfered successfully");
+    toast.success("Transfered successfully");
   }  
   
   const sendAllowance = async () => {
@@ -218,8 +230,13 @@ const TokenManagerScripts = (props) => {
         setIsLoading(false)
       },
     );
-    console.log(amount)
-    setAllowance({...allowance, ["amount"]: amount})
+    let newAllowance = {
+      ownerAddress: allowance.ownerAddress,
+      spenderAddress: allowance.spenderAddress,
+      allowedAddress: allowance.spenderAddress,
+      amount: amount
+    }
+    setAllowance(newAllowance)
     setIsLoading(false)
   }  
   
@@ -410,6 +427,37 @@ const TokenManagerScripts = (props) => {
     props.setPausable({ ...pausable, ["isPaused"]: false })   
   }
 
+  const sentAirDrop = async () => {
+    setIsLoading(true)
+    console.log(airDrop)
+    const addressesArray = airDrop.addresses.split(",");
+    const merkleRoot = createMerkleRoot(addressesArray);
+    props.token.set("airDropAddresses", addressesArray);
+    props.token.save();
+    await Moralis.enableWeb3();
+    const sendOptions = {
+      contractAddress: props.token?.attributes?.address,
+      functionName: "airDropTokens",
+      abi: ERC20_AIRDROP_ABI,
+      params: {
+        root_: merkleRoot,
+        rewardAmount_: toWei(airDrop.amount)
+      },
+    }
+    const transaction = await Moralis.executeFunction(sendOptions)
+    .catch(
+      (error) => {
+        toast.error(error.message)
+        setIsLoading(false)
+      },
+    );
+    console.log(`Transaction Hash: ${transaction.hash}`)
+    const result = await transaction.wait();
+    console.log(result)
+    setIsLoading(false)
+    toast.success("Air Drop created successfully");
+  }
+
   return (
     <>
     {isLoading ? (
@@ -529,7 +577,7 @@ const TokenManagerScripts = (props) => {
             onClick={sendAllowance}
             classnames={[' secondary-btn snapshot']}
           />
-        {allowance.amount !== "" && `Allowance to ${allowance.spenderAddress}: ${fromWei(allowance.amount)} ${props.token?.attributes?.symbol}`}
+        {allowance.amount !== "" && `Allowance to ${allowance.allowedAddress}: ${fromWei(allowance.amount)} ${props.token?.attributes?.symbol}`}
         </div>
       </div>
       {/* row #3 */}
@@ -675,14 +723,21 @@ const TokenManagerScripts = (props) => {
         <div className="column">
           <InputComponent
             type="number"
-            label="Airdrop"
-            labelName="Airdrop"
-            toolTip="Airdrop"
-            value={airdropAmount}
-            onChange={(e) => setAirdropAmount(e.target.value)}
+            label="amount"
+            labelName="Air Drop"
+            toolTip="AirDrop"
+            value={airDrop.amount}
+            onChange={onAirDropChangeHandler}
             placeholder="Number of Tokens"
           />
-          <ReactTooltip id="Airdrop" place="top" effect="solid">
+          <InputComponent
+            type="text"
+            label="addresses"
+            value={airDrop.addresses}
+            onChange={onAirDropChangeHandler}
+            placeholder="Address separeted by comma"
+          />
+          <ReactTooltip id="AirDrop" place="top" effect="solid">
             Provide csv or json file with addresses to bulk send tokens to
           </ReactTooltip>
           <ButtonGroups>
@@ -693,7 +748,7 @@ const TokenManagerScripts = (props) => {
             />
             <Button
               label={'Airdrop'}
-              onClick={submit}
+              onClick={sentAirDrop}
               classnames={[' secondary-btn snapshot']}
             />
           </ButtonGroups>
